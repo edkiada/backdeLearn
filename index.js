@@ -25,10 +25,10 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
-//app.use(express.static('dist'))
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
+app.use(express.static('dist'))
 
 app.get('/info', (req, res) => {
   const date = new Date();
@@ -66,8 +66,8 @@ app.post('/api/persons', (req, res) => {
   res.json(persons)
 })
 
-app.get('/', (req, res) => {
-  res.send('<h1>Hello! 伺服器運作中</h1>')
+app.get('/ping', (req, res) => {
+  res.send('pong')
 })
 
 app.get('/api/persons', (req, res) => {
@@ -92,4 +92,6 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
