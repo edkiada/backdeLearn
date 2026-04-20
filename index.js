@@ -66,6 +66,10 @@ app.post('/api/persons', (req, res) => {
   res.json(persons)
 })
 
+app.get('/', (req, res) => {
+  res.send('<h1>Hello! 伺服器運作中</h1>')
+})
+
 app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
