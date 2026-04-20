@@ -66,6 +66,15 @@ app.post('/api/persons', (req, res) => {
   res.json(persons)
 })
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'), (err) => {
+    if (err) {
+      // 如果出錯，至少我們會知道為什麼
+      res.status(500).send("伺服器找不到 index.html，錯誤訊息：" + err.message)
+    }
+  })
+})
+
 app.get('/ping', (req, res) => {
   res.send('pong')
 })
