@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -30,11 +31,16 @@ let persons = [
 /*-----------------------*/
 
 // DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-const password = 'test1234567'
-const url = `mongodb+srv://yyh901277111DB:${password}@cluster0.svq5vsd.mongodb.net/?appName=Cluster0`
-
+const url = process.env.MONGODB_URI
 mongoose.set('strictQuery',false)
+
 mongoose.connect(url)
+  .then(result => {
+    console.log('connected to MongoDB')
+  })
+  .catch(error => {
+    console.log('error connect')
+  })
 
 const noteSchema = new mongoose.Schema({
   content: String,
@@ -42,6 +48,7 @@ const noteSchema = new mongoose.Schema({
 })
 
 const Note = mongoose.model('Note', noteSchema)
+module.exports = Note
 /*-----------------------*/
 app.use(express.json())
 app.use(morgan('tiny'))
