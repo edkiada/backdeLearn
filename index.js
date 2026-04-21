@@ -30,7 +30,7 @@ let persons = [
 /*-----------------------*/
 
 // DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-const password = test1234567
+const password = 'test1234567'
 const url = `mongodb+srv://fullstack:${password}@cluster0.a5qfl.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery',false)
