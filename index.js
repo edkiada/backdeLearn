@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express();
+const mongoose = require('mongoose')
 
 let persons = [
   { 
@@ -27,7 +28,6 @@ let persons = [
 ]
 
 /*-----------------------*/
-const mongoose = require('mongoose')
 
 // DO NOT SAVE YOUR PASSWORD TO GITHUB!!
 const password = process.argv[2]
