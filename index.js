@@ -33,6 +33,18 @@ app.use(morgan('tiny'))
 app.use(cors())
 app.use(express.static('dist'))
 
+const errorHandler = (error, req, res, next) => {
+  console.log(error)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  next(error)
+}
+
+app.use(errorHandler)
+
 app.get('/info', (req, res) => {
   const date = new Date();
   const count = persons.length;
@@ -43,7 +55,7 @@ app.get('/info', (req, res) => {
   res.send(responseHtml);
 });
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', (req, res, next) => {
 
   const body = req.body
   if (!body.content) {
@@ -56,9 +68,11 @@ app.post('/api/notes', (req, res) => {
     important: body.important || false,
   })
 
-  note.save().then(savedNote => {
+  note.save()
+    .then(savedNote => {
     res.json(savedNote)
   })
+    .catch(error => next(error))
 })
 
 app.get('/', (req, res) => {
@@ -79,14 +93,17 @@ app.get('/api/notes', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/notes/:id', (req, res, next) => {
   const id = req.params.id
-  const person = persons.find(n => id === n.id)
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+  Note.findById(id)
+    .then(note => {
+      if(note) {
+        res.json(note)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch(error => next(error)) 
 })
 
 app.delete('/api/persons/:id', (req, res) => {
