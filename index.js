@@ -3,7 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express();
-const mongoose = require('mongoose')
+const Note = require('./models/note')
 
 let persons = [
   { 
@@ -28,28 +28,6 @@ let persons = [
   }
 ]
 
-/*-----------------------*/
-
-// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-const url = process.env.MONGODB_URI
-mongoose.set('strictQuery',false)
-
-mongoose.connect(url)
-  .then(result => {
-    console.log('connected to MongoDB')
-  })
-  .catch(error => {
-    console.log('error connect')
-  })
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-})
-
-const Note = mongoose.model('Note', noteSchema)
-module.exports = Note
-/*-----------------------*/
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
@@ -65,30 +43,22 @@ app.get('/info', (req, res) => {
   res.send(responseHtml);
 });
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/notes', (req, res) => {
 
   const body = req.body
-  if (!body.content && !body.name) {
+  if (!body.content) {
     return res.status(400).json({
       error: 'content missing'
     })
   }
-
-  const isUnique = persons.some(p => p.name === body.name)
-  if (isUnique) {
-    return res.status(402).json({
-      error: 'name must be unique'
-    })
-  }
-
-  const person = {
+  const note = new Note({
     content: body.content,
-    name: body.name,
-    id: String(Math.floor(Math.random() * 1000001))
-  }
+    important: body.important || false,
+  })
 
-  persons = persons.concat(person)
-  res.json(persons)
+  note.save().then(savedNote => {
+    res.json(savedNote)
+  })
 })
 
 app.get('/', (req, res) => {
