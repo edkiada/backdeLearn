@@ -1,7 +1,7 @@
-POST https://backdelearn.onrender.com/api/notes
+POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-  "content": "vs test rest client is a {{$processEnv process environment variable name}}",
+  "content": "that is test",
   "important": true
 }
