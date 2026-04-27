@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY5ZWRhOGMxMGQyZThlNzY4NDhmMzRmYyIsImlhdCI6MTc3NzE4NTQ4M30.P24XbgTrGZK2uaqGxn1_gAU1mgckenlLxCMNqX-c9BA
+
+{
+  "content": "oh ya baby",
+  "important": false
+}
+

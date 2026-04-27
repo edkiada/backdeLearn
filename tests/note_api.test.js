@@ -37,13 +37,19 @@ test('the first note is about HTTP methods', async () => {
 })
 
 test('a valid note can be added', async () => {
+  const loginResponse = await api
+    .post('/api/login')
+    .send({ username: 'root', password: 'sekret'})
+
+  const token = loginResponse.body.token
+  
   const newNote = {
     content: 'async/await simplifies making async calls',
     important: true,
   }
-
   await api
     .post('/api/notes')
+    .set('Authorization', `Bearer ${token}`)
     .send(newNote)
     .expect(201)
     .expect('Content-Type', /application\/json/)
